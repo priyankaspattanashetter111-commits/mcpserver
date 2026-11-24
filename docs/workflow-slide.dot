@@ -1,0 +1,17 @@
+digraph Compact {
+ graph [rankdir=TB,bgcolor="#F8F5E9",pad="0.15",nodesep="0.3",ranksep="0.28"];
+ node [shape=box,style="rounded,filled",fillcolor=white,color="#305D61",fontname="DejaVu Sans",fontsize=21,margin="0.16,0.12"];
+ edge [color="#305D61",fontname="DejaVu Sans",fontsize=16];
+ read [label="Receipt + policy + calendar"];
+ check [label="Eligibility check",fillcolor="#FBE4C8"];
+ stop [label="Stop and explain\nExpired / unclear / replacement",fillcolor="#FAE3DC"];
+ preview [label="Exact plan preview"];
+ approval [label="User approval",fillcolor="#FBE4C8"];
+ out [label="Local draft + reminder\nSafe retries"];
+ read -> check;
+ check -> stop [label="blocked"];
+ check -> preview [label="eligible"];
+ preview -> approval;
+ approval -> out;
+ {rank=same;stop;preview;}
+}

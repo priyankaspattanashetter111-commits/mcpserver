@@ -1,0 +1,23 @@
+digraph Blueprint {
+ graph [rankdir=TB,bgcolor="#F8F5E9",pad="0.3",nodesep="0.45",ranksep="0.5",fontname="DejaVu Sans",label="ReturnRelay • Working local blueprint",labelloc=t,fontsize=24];
+ node [shape=box,style="rounded,filled",fontname="DejaVu Sans",fontsize=15,color="#305D61",fillcolor="#FFFFFF",margin="0.2,0.16"];
+ edge [fontname="DejaVu Sans",fontsize=11,color="#305D61",arrowsize=0.7];
+ user [label="Browser UI\nSelect purchase • Review exact effects"];
+ host [label="FastAPI MCP host\nDeterministic policy and slot planner",fillcolor="#E4EFD9"];
+ evidence [label="Evidence MCP server\nReceipt + versioned policy\nSynthetic mail records"];
+ calendar [label="Calendar MCP server\nRead availability\nSynthetic busy slots"];
+ gate [label="Human approval gate\nPlan-bound HMAC • 5 minute expiry",fillcolor="#FBE4C8"];
+ actions [label="Actions MCP server\nVerify approval + policy\nIdempotent local transaction"];
+ db [label="SQLite\nPlans • Outputs • Audit trail",shape=cylinder];
+ out [label="Downloadable email draft + calendar file\nRefund evidence explicitly unverified"];
+ user -> host [label="preview"];
+ host -> evidence [label="MCP stdio • tools/call",dir=both];
+ host -> calendar [label="MCP stdio • tools/call",dir=both];
+ host -> gate [label="exact plan preview"];
+ user -> gate [label="explicit approval",style=dashed];
+ gate -> actions [label="signed authorization via MCP"];
+ host -> db [label="save plan",style=dashed];
+ actions -> db [label="atomic local write",dir=both];
+ actions -> out [label="approved outputs"];
+ {rank=same;evidence;calendar;}
+}

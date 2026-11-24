@@ -1,0 +1,23 @@
+digraph Compact {
+ graph [rankdir=LR,bgcolor="#F8F5E9",pad="0.15",nodesep="0.6",ranksep="0.55",splines=polyline];
+ node [shape=box,style="rounded,filled",fillcolor=white,color="#305D61",fontname="DejaVu Sans",fontsize=20,margin="0.16,0.15"];
+ edge [color="#305D61",fontname="DejaVu Sans",fontsize=13,arrowsize=0.7];
+ ui [label="Browser\nHTML + JavaScript"];
+ host [label="FastAPI host\nPolicy + slot rules",fillcolor="#E4EFD9"];
+ approval [label="User approval\nExact plan + expiry",fillcolor="#FBE4C8"];
+ action [label="Actions MCP\nVerify + deduplicate"];
+ files [label="Local outputs\nEmail draft + ICS"];
+ evidence [label="Evidence MCP\nReceipt + policy"];
+ calendar [label="Calendar MCP\nBusy periods"];
+ db [label="SQLite\nPlans + outputs + audit",shape=cylinder];
+ ui -> host [label="preview"];
+ host -> approval [label="show plan"];
+ approval -> action [label="signed approval"];
+ action -> files [label="prepare"];
+ host -> evidence [dir=both,label="MCP stdio",constraint=false];
+ host -> calendar [dir=both,label="MCP stdio",constraint=false];
+ action -> db [dir=both,label="local transaction",constraint=false];
+ {rank=same;host;evidence;calendar;}
+ {rank=same;action;db;}
+ evidence -> calendar [style=invis];
+}

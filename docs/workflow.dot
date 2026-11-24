@@ -1,0 +1,22 @@
+digraph Flow {
+ graph [rankdir=TB,bgcolor="#F8F5E9",pad="0.3",nodesep="0.4",ranksep="0.35",fontname="DejaVu Sans",label="ReturnRelay • Decision blueprint",labelloc=t,fontsize=24];
+ node [shape=box,style="rounded,filled",fillcolor=white,color="#305D61",fontname="DejaVu Sans",fontsize=15,margin="0.18,0.13"];
+ edge [color="#305D61",fontname="DejaVu Sans",fontsize=11];
+ read [label="Read receipt + policy + calendar via MCP"];
+ check [label="Known return policy, valid deadline\nand declared condition?",shape=diamond,fillcolor="#FBE4C8"];
+ stop [label="Stop and explain\nExpired / replacement only / unclear policy",fillcolor="#FAE3DC"];
+ preview [label="Show evidence, exact email and free slot"];
+ approval [label="User approves exact plan?",shape=diamond,fillcolor="#FBE4C8"];
+ none [label="No outputs created"];
+ verify [label="Verify signed approval + current policy"];
+ atomic [label="Prepare draft + reminder in one local transaction\nRetry returns the existing pair"];
+ evidence [label="Track merchant evidence\nBank credit stays unverified"];
+ read -> check;
+ check -> stop [label="no"];
+ check -> preview [label="yes"];
+ preview -> approval;
+ approval -> none [label="no"];
+ approval -> verify [label="yes"];
+ verify -> atomic;
+ atomic -> evidence;
+}
